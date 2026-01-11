@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/swp-pdf-writer.iml" filepath="$PROJECT_DIR$/.idea/swp-pdf-writer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/A_122_PDFScript.iml" filepath="$PROJECT_DIR$/A_122_PDFScript.iml" />
     </modules>
   </component>
 </project>
