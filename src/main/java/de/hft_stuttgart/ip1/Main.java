@@ -1,6 +1,5 @@
 package de.hft_stuttgart.ip1;
 
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -15,15 +14,63 @@ public class Main {
 
     private static final String DEFAULT_SCRIPT = """
             output "out.pdf".
-            font size 12 style regular colour black "Helvetica".
-            print @ 50,800 width 500 alignment left "Hallo PDFScript! Zeilenumbruch funktioniert auch bei längeren Texten, solange width gesetzt ist.".
-            table columns 3 rows 3 width 120,160,200 height 20,20,20 lines black background 0xF0F0F0 thickness 2.
-            print @cell 0,0 width 110 alignment left "Zelle (0,0)".
-            print @cell 1,1 width 150 alignment left "Mehrzeiliger Text in einer Zelle mit Umbruch.".
+            font size 18 style bold colour 0x003366 "Helvetica".
+            print @ 50,810 width 520 alignment left "PDFScript Demo".
+            font size 11 style regular colour black "Helvetica".
+            print @ 50,785 width 520 alignment left "Diese PDF zeigt: Fonts, Farben, Alignment, Zeilenumbruch, Tabellen und Formularfelder.".
+            print @ 50,770 width 520 alignment left "Hinweis: Tabellenhoehen werden im Skript festgelegt (keine Auto-Hoehe).".
+            font size 12 style regular colour 0x222222 "Times".
+            print @ 50,740 width 520 alignment left "Absatz linksbuendig: Ein laengerer Text, der automatisch umgebrochen wird, wenn eine maximale Breite angegeben ist.".
+            font size 12 style italic colour 0x444444 "Times".
+            print @ 50,705 width 520 alignment center "Zentrierte Zeile (alignment center)".
+            font size 12 style bold colour 0x444444 "Times".
+            print @ 50,685 width 520 alignment right "Rechtsbuendige Zeile (alignment right)".
+
+            font size 11 style regular colour black "Helvetica".
+            print @ 50,655 width 520 alignment left "Tabelle: 6 Spalten x 6 Zeilen (gefuellt mit mehreren Zellen, inkl. Umbruch in Zellen).".
+            table columns 6 rows 6 width 80,110,110,110,110,90 height 28,34,34,34,34,34 lines 0x000000 background 0xF3F3F3 thickness 1.
+
+            font size 10 style bold colour 0x003366 "Helvetica".
+            print @cell 0,0 width 74 alignment left "Nr".
+            print @cell 1,0 width 104 alignment left "Name".
+            print @cell 2,0 width 104 alignment left "Kategorie".
+            print @cell 3,0 width 104 alignment left "Status".
+            print @cell 4,0 width 104 alignment left "Kommentar".
+            print @cell 5,0 width 84 alignment left "Score".
+
+            font size 10 style regular colour black "Helvetica".
+            print @cell 0,1 width 74 "1".
+            print @cell 1,1 width 104 "Druck".
+            print @cell 2,1 width 104 "Text".
+            print @cell 3,1 width 104 "OK".
+            print @cell 4,1 width 104 "Ein kurzer Hinweis.".
+            print @cell 5,1 width 84 alignment right "95".
+
+            print @cell 0,2 width 74 "2".
+            print @cell 1,2 width 104 "Tabelle".
+            print @cell 2,2 width 104 "Layout".
+            print @cell 3,2 width 104 "OK".
+            print @cell 4,2 width 104 "Mehrzeiliger Text in einer Tabellenzelle mit Umbruch.".
+            print @cell 5,2 width 84 alignment right "88".
+
+            print @cell 0,3 width 74 "3".
+            print @cell 1,3 width 104 "Forms".
+            print @cell 2,3 width 104 "UI".
+            print @cell 3,3 width 104 "OK".
+            print @cell 4,3 width 104 "Textfeld/Dropdown/Checkbox auf Seite 2.".
+            print @cell 5,3 width 84 alignment right "91".
+
             nextpage.
-            control @ 50,800 type textbox content "Textfeld".
-            control @ 50,760 type dropdown "A;B;C" content "B".
-            control @ 50,720 type option content "true".
+            font size 16 style bold colour 0x003366 "Helvetica".
+            print @ 50,810 width 520 "Formularelemente".
+            font size 11 style regular colour black "Helvetica".
+            print @ 50,785 width 520 "Die folgenden Felder sind interaktiv (je nach PDF-Viewer).".
+            print @ 50,750 width 520 "Name:".
+            control @ 50,732 type textbox content "Max Mustermann".
+            print @ 50,700 width 520 "Studiengang:".
+            control @ 50,682 type dropdown "Informatik;Wirtschaftsinformatik;Bauinformatik;Sonstiges" content "Informatik".
+            print @ 50,650 width 520 "Einverstanden:".
+            control @ 50,632 type option content "true".
             """;
 
     public static void main(String[] args) {
@@ -33,7 +80,7 @@ public class Main {
     private static void startUi() {
         try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); } catch (Exception ignored) {}
 
-        JFrame f = new JFrame("Scripting PDF (kompakt)");
+        JFrame f = new JFrame("Scripting PDF");
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         f.setLayout(new BorderLayout(8, 8));
 
@@ -103,10 +150,12 @@ public class Main {
         String current = p.getProperty(PROP_VIEWER, defaultViewer());
         String input = JOptionPane.showInputDialog(parent,
                 "PDF-Viewer Kommando\nPlatzhalter: {file}\n\nBeispiele:\n" +
-                        "Linux: xdg-open {file}\nmacOS: open {file}\nWindows: cmd /c start \"\" {file}",
+                        "Linux: xdg-open {file}\nmacOS: open {file}\nWindows: cmd /c start \"\" \"{file}\"",
                 current);
         if (input == null) return;
-        p.setProperty(PROP_VIEWER, input.trim().isEmpty() ? defaultViewer() : input.trim());
+
+        String v = input.trim().isEmpty() ? defaultViewer() : input.trim();
+        p.setProperty(PROP_VIEWER, v);
         saveProps(p);
         status.setText("Viewer gespeichert.");
     }
@@ -114,10 +163,18 @@ public class Main {
     private static void openPdf(Path pdf) {
         Properties p = loadProps();
         String cmd = p.getProperty(PROP_VIEWER, defaultViewer());
-        cmd = cmd.replace("{file}", pdf.toAbsolutePath().toString());
+
+        // make Windows paths safe by default
+        if (cmd.contains("{file}")) {
+            String file = pdf.toAbsolutePath().toString();
+            if (!cmd.contains("\"{file}\"") && file.contains(" ")) {
+                cmd = cmd.replace("{file}", "\"" + file + "\"");
+            } else {
+                cmd = cmd.replace("{file}", file);
+            }
+        }
 
         try {
-            // simple split – reicht für die typischen Standard-Commands
             new ProcessBuilder(cmd.split("\\s+")).inheritIO().start();
         } catch (Exception ignored) {}
     }
@@ -126,25 +183,22 @@ public class Main {
         Properties p = new Properties();
         Path file = Paths.get(System.getProperty("user.home"), PROP_FILE);
         if (Files.exists(file)) {
-            try (var in = Files.newInputStream(file)) {
-                p.load(in);
-            } catch (Exception ignored) {}
+            try (var in = Files.newInputStream(file)) { p.load(in); }
+            catch (Exception ignored) {}
         }
         return p;
     }
 
     private static void saveProps(Properties p) {
         Path file = Paths.get(System.getProperty("user.home"), PROP_FILE);
-        try (var out = Files.newOutputStream(file)) {
-            p.store(out, "pdfscript settings");
-        } catch (Exception ignored) {}
+        try (var out = Files.newOutputStream(file)) { p.store(out, "pdfscript settings"); }
+        catch (Exception ignored) {}
     }
 
     private static String defaultViewer() {
         String os = System.getProperty("os.name", "").toLowerCase();
-        if (os.contains("win")) return "cmd /c start \"\" {file}";
+        if (os.contains("win")) return "cmd /c start \"\" \"{file}\"";
         if (os.contains("mac")) return "open {file}";
         return "xdg-open {file}";
     }
 }
-

@@ -1,6 +1,5 @@
 package de.hft_stuttgart.ip1;
 
-
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
 import java.io.IOException;
@@ -52,7 +51,6 @@ public final class Wrap {
                 out.add(rtrim(s.substring(start, cut)));
                 i = lastBreak + 1;
             } else {
-                // very long word: hard cut
                 out.add(s.substring(start, pos));
                 i = pos;
             }
@@ -70,4 +68,3 @@ public final class Wrap {
         return s.substring(0, end);
     }
 }
-
