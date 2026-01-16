@@ -4,6 +4,7 @@ import de.hft_stuttgart.ip1.PdfScript;
 import de.hft_stuttgart.ip1.Table;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TableCommand implements Command {
@@ -30,6 +31,37 @@ public class TableCommand implements Command {
 
         if (cols <= 0 || rows <= 0) throw new IllegalArgumentException("table needs columns/rows");
         if (widths == null || heights == null) throw new IllegalArgumentException("table needs width/height");
+
+        // ----- FIT TABLE INTO PAGE -----
+        widths = new ArrayList<>(widths);
+        heights = new ArrayList<>(heights);
+
+        float margin = 50f;
+        float pageW = ctx.page().getMediaBox().getWidth();
+        float pageH = ctx.page().getMediaBox().getHeight();
+
+        float boxW = pageW - 2 * margin;
+
+        // aktuelle Tabellengröße
+        float sumW = 0;
+        for (float v : widths) sumW += v;
+
+        float sumH = 0;
+        for (float v : heights) sumH += v;
+
+        // falls Tabelle unten rausläuft → neue Seite
+        float bottomY = ctx.cursorY() - sumH;
+        if (bottomY < margin) {
+            ctx.newPage();
+        }
+
+        // falls Tabelle zu breit → proportional skalieren
+        if (sumW > boxW) {
+            float scale = boxW / sumW;
+            for (int i = 0; i < widths.size(); i++) {
+                widths.set(i, widths.get(i) * scale);
+            }
+        }
 
         Table table = new Table(ctx.cursorX(), ctx.cursorY(), cols, rows, widths, heights);
         ctx.setTable(table);

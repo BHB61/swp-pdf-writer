@@ -1,0 +1,133 @@
+output "abnahme-demo.pdf".
+
+font size 18 style bold colour 0x003366 "Helvetica".
+print @ 50,810 width 520 alignment left "PDFScript – Abnahme/Test-Demo".
+
+font size 11 style regular colour black "Helvetica".
+print @ 50,785 width 520 alignment left
+"Dieses Dokument testet: output, font, print (@ und width/Umbruch), alignment, \\n, table (width/height/*), @cell, image, control (textbox/max, dropdown, option, radio) und nextpage.".
+
+font size 11 style italic colour 0x666666 "Helvetica".
+print @ 50,768 width 520 alignment left
+"Fonts/Farben: Helvetica / Times / Courier + mehrere Farben (Hex).".
+
+font size 12 style regular colour 0x222222 "Times".
+print @ 50,740 width 520 alignment left
+"Langer Text zum Testen des automatischen Zeilenumbruchs. Der Text sollte an Leerzeichen oder Bindestrich getrennt werden, wenn die maximale Breite erreicht ist. Beispiel: super-langer-Begriff-mit-Trennstrich der umgebrochen werden soll.".
+
+font size 12 style italic colour 0x444444 "Times".
+print @ 50,705 width 520 alignment center "Alignment CENTER getestet.".
+
+font size 12 style bold colour 0x444444 "Times".
+print @ 50,685 width 520 alignment right "Alignment RIGHT getestet.".
+
+font size 11 style regular colour black "Helvetica".
+print @ 50,660 width 520 alignment left "Tabelle: 5 Spalten x 6 Zeilen (ohne Kommentar-Spalte), feste Größen, Hintergrund und Linien.".
+
+table columns 5 rows 6
+width 60,140,120,120,80
+height 28,34,34,34,34,34
+lines 0x000000 background 0xF3F3F3 thickness 1.
+
+font size 10 style bold colour 0x003366 "Helvetica".
+print @cell 0,0 alignment center "Nr".
+print @cell 1,0 alignment center "Name".
+print @cell 2,0 alignment center "Kategorie".
+print @cell 3,0 alignment center "Status".
+print @cell 4,0 alignment center "Score".
+
+font size 10 style regular colour black "Helvetica".
+print @cell 0,1 alignment center "1".
+print @cell 1,1 "Druck".
+print @cell 2,1 "Text".
+print @cell 3,1 alignment center "OK".
+print @cell 4,1 alignment right "95".
+
+print @cell 0,2 alignment center "2".
+print @cell 1,2 "Tabelle".
+print @cell 2,2 "Layout".
+print @cell 3,2 alignment center "OK".
+print @cell 4,2 alignment right "88".
+
+print @cell 0,3 alignment center "3".
+print @cell 1,3 "Forms".
+print @cell 2,3 "UI".
+print @cell 3,3 alignment center "OK".
+print @cell 4,3 alignment right "91".
+
+print @cell 0,4 alignment center "4".
+print @cell 1,4 "Bild".
+print @cell 2,4 "Media".
+print @cell 3,4 alignment center "Optional".
+print @cell 4,4 alignment center "—".
+
+print @cell 0,5 alignment center "5".
+print @cell 1,5 "Fonts".
+print @cell 2,5 "Text".
+print @cell 3,5 alignment center "OK".
+print @cell 4,5 alignment right "90".
+
+font size 10 style italic colour 0x666666 "Helvetica".
+print @ 50,415 width 520 alignment left
+"Optionaler Bild-Test: lege 'logo.png' in den Projektordner. Das Bild wird zentriert eingefügt.".
+
+image @ 230,360 size 160,60 "logo.png".
+
+nextpage.
+
+font size 16 style bold colour 0x003366 "Helvetica".
+print @ 50,810 width 520 alignment left "Formularelemente (Interaktiv)".
+
+font size 11 style regular colour black "Helvetica".
+print @ 50,788 width 520 alignment left
+"Hinweis: In Browser-PDF-Viewern funktionieren Formfelder teils eingeschränkt. Adobe Reader/Okular ist besser.".
+
+font size 11 style regular colour black "Helvetica".
+print @ 50,755 width 520 alignment left "Textbox (mit max Zeichen):".
+control @ 50,735 type textbox max 30 content "Max Mustermann".
+
+print @ 50,700 width 520 alignment left "Dropdown:".
+control @ 50,680 type dropdown "A;B;C" content "B".
+
+print @ 50,645 width 520 alignment left "Checkbox (option):".
+control @ 50,623 type option content "true".
+print @ 75,627 width 320 alignment left "Ich stimme zu".
+
+print @ 50,590 width 520 alignment left "Radio-Gruppe (1 aus n):".
+control @ 50,565 type radio group "lang" content "Java" selected "Java".
+print  @ 75,569 width 200 alignment left "Java".
+control @ 50,540 type radio group "lang" content "Python" selected "Java".
+print  @ 75,544 width 200 alignment left "Python".
+control @ 50,515 type radio group "lang" content "C#" selected "Java".
+print  @ 75,519 width 200 alignment left "C#".
+
+font size 11 style italic colour 0x666666 "Helvetica".
+print @ 50,475 width 520 alignment left
+"Font-/Farbbeispiele:".
+
+font size 12 style regular colour 0xAA0000 "Times".
+print @ 50,452 width 520 alignment left "Times (rot, regular)".
+
+font size 12 style bold colour 0x006600 "Helvetica".
+print @ 50,434 width 520 alignment left "Helvetica (gruen, bold)".
+
+font size 12 style italic colour 0x000099 "Courier".
+print @ 50,416 width 520 alignment left "Courier (blau, italic)".
+
+nextpage.
+
+font size 16 style bold colour 0x003366 "Helvetica".
+print @ 50,810 width 520 alignment left "Mehrzeilen-Text (\\n)".
+
+font size 11 style regular colour black "Helvetica".
+print @ 50,788 width 520 alignment left "Der folgende Print enthält explizite Zeilenumbrüche:".
+
+font size 12 style regular colour 0x222222 "Times".
+print @ 50,748 width 520 """
+Zeile 1
+Zeile 2
+Zeile 3
+""".
+
+font size 11 style regular colour black "Helvetica".
+print @ 50,700 width 520 alignment left "Ende der Demo.".
